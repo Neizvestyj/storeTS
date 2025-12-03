@@ -1,21 +1,25 @@
-<script setup>
+<script setup lang="ts">
 
-import { ref, computed } from 'vue';
+import { ref } from 'vue';
 import { useStore } from '../store';
 
 const store = useStore();
-const selectedFilter = ref("product");
-const priceRanges = ref({
+const selectedFilter = ref<string>("product");
+type PriceRanges = {
+    [key: string]: boolean;
+};
+const priceRanges = ref<PriceRanges>({
     "$0 - $50": false,
     "$50 - $100": false,
     "$100 - $200": false,
     "Over $200": false,
 });
-const drop = ref(null);
+const drop = ref<number>(0);
 
-const sortItems = () => {
+const sortItems = (): void => {
     console.log("sortItems", selectedFilter.value)
     let selectedPriceRanges = Object.entries(priceRanges.value)
+
         .filter(([range, isChecked]) => isChecked) // Отбираем только отмеченные диапазоны
         .map(([range]) => range);
     // Получаем только названия диапазонов
@@ -24,14 +28,14 @@ const sortItems = () => {
         priceRanges: selectedPriceRanges
     })
     //.then(() => {console.log("Dispatch completed"); // Подтверждение выполнения действия }).catch(error => {console.error("Error in dispatch:", error); // Логируем ошибки});
-    drop.value = null
+    drop.value = 0
 };
 
 const sortSize = () => {
-    drop.value = null;
+    drop.value = 0;
 };
 
-const sortCheckbox = () => {
+/*const sortCheckbox = () => {
     console.log("sortCheckbox")
     let selectedPriceRanges = Object.entries(priceRanges.value)
         .filter(([range, isChecked]) => isChecked) // Отбираем только отмеченные диапазоны
@@ -40,13 +44,14 @@ const sortCheckbox = () => {
         filter: selectedFilter.value,
         priceRanges: selectedPriceRanges
     });
-    drop.value = null;
-};
+    drop.value = 0;
+};*/
 
-const togglePriceRange = (priceRange) => {
+const togglePriceRange = (priceRange: keyof PriceRanges) => {
     priceRanges.value[priceRange] = !priceRanges.value[priceRange];
-    sortCheckbox();
-    drop.value = null
+    //sortCheckbox();
+    sortItems();
+    drop.value = 0
 };
 </script>
 <template>

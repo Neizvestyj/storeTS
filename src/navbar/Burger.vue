@@ -1,11 +1,11 @@
-<script setup>
+<script setup lang="ts">
 
 import { computed, nextTick, getCurrentInstance, onMounted, onBeforeUnmount } from 'vue';
 import { useStore } from '../store';
 const store = useStore();
 const isOpen = computed(() => store.isOpen);
 const { proxy } = getCurrentInstance();
-const toggleMenu = (event) => {
+const toggleMenu = (event:MouseEvent):void => {
     if (event && event.stopPropagation) event.stopPropagation();
     store.toggleMenu();
 
@@ -24,18 +24,18 @@ const closeMenu = () => {
     store.closeMenu();
 };
 
-const onOutside = (e) => {
+const onOutside = (e:MouseEvent) => {
     const menu = proxy.$refs.menuRef;
     if (!menu) return;
 
     // Проверка был ли клик вне меню 
-    if (!menu.contains(e.target)) {
+    if (!menu.contains(e.target as Node)) {
         closeMenu();
     }
 };
 
-const onKeydown = (e) => {
-    if (e.key === "Escape" || e.key === "Esc") {
+const onKeydown = (e: KeyboardEvent) => {
+    if (e.key === "Escape") {
         closeMenu();
     }
 };

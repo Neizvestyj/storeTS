@@ -1,19 +1,20 @@
-<script setup>
+<script setup lang="ts">
 
 import { ref } from 'vue';
 import { useStore } from '../store';
 
 const store = useStore(); // Используем Pinia Store
 
-const searchText = ref(""); // Создаем реактивную переменную для поиска
-const flag = ref(false);
+const searchText = ref<string>("");
+ // Создаем реактивную переменную для поиска
+const flag = ref<boolean>(false);
 // Создаем флаг, если необходимо
-const changeSearchFlag = (event) => {
+const changeSearchFlag = (event:Event):void => {
     event.preventDefault();
     flag.value = !flag.value;
 };
 
-const submit = (event) => {
+const submit = (event:Event):void => {
     event.preventDefault(); store.searchCards(searchText.value);
     // Отправляем действие в Store
     flag.value = false;
@@ -22,7 +23,7 @@ const submit = (event) => {
     // Очищаем поле ввода
 };
 
-const stopPropagation = (event) => {
+const stopPropagation = (event:Event):void => {
     event.stopPropagation(); // Остановим всплытие события
 };
 </script>

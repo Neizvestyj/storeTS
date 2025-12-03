@@ -1,11 +1,8 @@
-<script>
+<script setup lang="ts">
 import Search from './Search.vue'
 import Burger from './Burger.vue'
 import RegistrationLink from './RegistrationLink.vue'
 import Basket from './Basket.vue'
-export default {
-  components: { Search, Burger, RegistrationLink, Basket },
-}
 
 </script>
 

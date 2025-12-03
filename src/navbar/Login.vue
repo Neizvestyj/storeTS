@@ -1,43 +1,42 @@
-<script setup>
+<script setup lang="ts">
 import { ref, computed } from 'vue';
 import { useStore } from '../store';
-const store = useStore(); 
-        const email = ref("");
-        const password = ref("");
-        const gender = ref("");
-        const firstName = ref("");
-        const lastName = ref("");
-        const emailError = ref("");
+const store = useStore();
+const email = ref<string>("");
+const password = ref<string>("");
+const gender = ref<string>("");
+const firstName = ref<string>("");
+const lastName = ref<string>("");
+const emailError = ref<string>("");
 //Вычисляемое свойство для проверки валидности всех полей 
 const isValid = computed(() => {
-return validateEmail(email.value) && email.value !== '' && password.value !== '' && firstName.value !== '' && lastName.value !== '' && gender.value !== '';
+    return validateEmail(email.value) && email.value !== '' && password.value !== '' && firstName.value !== '' && lastName.value !== '' && gender.value !== '';
 });
 //Сообщение об ошибке email
-const emailErrorMessage = computed(()=>emailError.value !== '' ?emailError.value : ''
-);
+//const emailErrorMessage = computed(() => emailError.value !== '' ? emailError.value : '');
 //Функция для валидации
-const validateEmail = (email) => {
-const re = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-return re.test(String(email).toLowerCase());
+const validateEmail = (email: string): boolean => {
+    const re = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    return re.test(String(email).toLowerCase());
 };
 //Функция отправки данных
-const submit = (event) => {
-event.preventDefault();
-if(isValid.value) {
-store.login();
-emailError.value = '';
-email.value = "";
-password.value = '';
-gender.value = '';
-firstName.value = '';
-lastName.value = '';
-store.isValid.value = true;
- } else {
-emailError.value = 'Введите корректный адрес электронной почты';
-store.isValid.value = false;
-  }
-};      
-  
+const submit = (event: Event): void => {
+    event.preventDefault();
+    if (isValid.value) {
+        store.login();
+        emailError.value = '';
+        email.value = "";
+        password.value = '';
+        gender.value = '';
+        firstName.value = '';
+        lastName.value = '';
+        store.isValid = true;
+    } else {
+        emailError.value = 'Введите корректный адрес электронной почты';
+        store.isValid = false;
+    }
+};
+
 </script>
 <template>
     <div>
@@ -60,25 +59,26 @@ store.isValid.value = false;
                 </div>
 
                 <div class="form-radio">
-                    <input v-model="gender" type="radio" name="gender" id="male">
+                    <input v-model="gender" type="radio" name="gender" id="male" value="male">
                     <label class="form-radio_male" for="male">Male</label>
-                    <input v-model="gender" type="radio" name="gender" id="Female">
+                    <input v-model="gender" type="radio" name="gender" id="Female" value="female">
                     <label class="form-radio_male" for="female">Female</label>
                 </div>
 
                 <div class="form-login form-registration">
                     <h2 class="form-reg_name">Login details</h2>
 
-                    <input v-model.trim="email" class="form-reg_first" type="Email" name="Email" placeholder="Email">
+                    <input v-model.trim="email" class="form-reg_first" type="Email" name="Email" placeholder="Email"
+                        required>
 
                     <input v-model.trim="password" class="form-reg_first" type="Password" name="Password"
-                        placeholder="Password">
+                        placeholder="Password" required>
                     <p class="form-text">Please use 8 or more characters, with at least 1 number and a mixture of uppercase
                         and
                         lowercase
                         letters</p>
 
-                    <button v-if="isValid" type="submit" @click="submit" class="form-btn_join"><span class="join">JOIN
+                    <button v-if='isValid' type="submit" class="form-btn_join"><span class="join">JOIN
                             NOW</span>
                         <svg class="join-svg" width="17" height="10" viewBox="0 0 17 10" fill="none"
                             xmlns="http://www.w3.org/2000/svg">

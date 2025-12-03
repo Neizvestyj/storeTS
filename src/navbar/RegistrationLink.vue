@@ -1,10 +1,4 @@
-<script>
-
-
-export default {
-    name: "RegistrationLink"
-
-}
+<script setup lang="ts">
 
 </script>
 

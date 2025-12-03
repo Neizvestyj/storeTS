@@ -1,9 +1,9 @@
-<script setup>
+<script setup lang="ts">
 alert('alert')
 import { computed, watch, ref, onMounted } from 'vue';
 import { useStore } from '../store';
 const store = useStore(); // Инициализация store
-const alertRef = ref(null); // Создаем ссылку на элемент
+const alertRef = ref<HTMLDivElement|null>(null); // Создаем ссылку на элемент
 const isValidDel = computed(() => store.isValidDel);
 
 const closed = () => {
@@ -15,7 +15,6 @@ const closed = () => {
 
 watch(isValidDel, (newValue) => {
     if (newValue) {
-        console.log(isValidDel.value);
         if (alertRef.value) {
             alertRef.value.classList.add("show");
         }

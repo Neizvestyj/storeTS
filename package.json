@@ -9,13 +9,15 @@
     "preview": "vite preview"
   },
   "devDependencies": {
+    "@types/vue": "^1.0.31",
+    "@vitejs/plugin-vue": "^6.0.2",
     "typescript": "~5.9.3",
     "vite": "^7.2.4"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^7.1.0",
-    "@vitejs/plugin-vue": "^6.0.2",
     "pinia": "^3.0.4",
+    "uuid": "^13.0.0",
     "vue-router": "^4.6.3"
   }
 }

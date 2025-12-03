@@ -1,17 +1,27 @@
-<script setup>
+<script setup lang="ts">
 import Alertdel from './Alertdel.vue'
 import { ref, computed } from 'vue';
 import { useStore } from '../store';
 const store = useStore();
-const city = ref("");
-const stateInput = ref("");
-const zip = ref("");
-const emailError = ref("");
+const city = ref<string>("");
+const stateInput = ref<string>("");
+const zip = ref<string>("");
+const emailError = ref<string>("");
 
+interface Card {
+    id: number;
+    name: string;
+    image: string;
+    price: number;
+    quantity: number;
+    trending: boolean;
+    removing: boolean;
+    ide: number;
+    color: string;
+    size: string;
+}
 
-
-//const del = (idDel, ide, color, size) => { store.del({ idDel, ide, color, size })};
-const del = (card) => {
+const del = (card:Card) => {
     card.removing = true;
     setTimeout(() => {
         store.del(card); // Вызываем метод удаления из хранилища
@@ -25,7 +35,7 @@ const buy = () => {
     store.buy();
 };
 //Обработка формы отправки
-const submit = (event) => {
+const submit = (event:Event):void=> {
     event.preventDefault();
     if (isValid.value) {
         store.login();
@@ -35,7 +45,7 @@ const submit = (event) => {
         store.isValid = true;
     } else {
         emailError.value = 'Введите корректный адрес';
-        store.isValid = false;
+        store.isValid.value = false;
     }
 };
 //Очистка корщины
@@ -44,7 +54,7 @@ const clear = () => {
 };
 
 //Увилечение колличество товра
-const increaseQuantity = (card) => {
+const increaseQuantity = (card:Card) => {
     card.quantity++;
     store.increaseQuantity({
         quantity: card.quantity,
@@ -56,7 +66,7 @@ const increaseQuantity = (card) => {
 };
 
 //Уменьшение колличество товара
-const decreaseQuantity = (card) => {
+const decreaseQuantity = (card:Card) => {
     if (card.quantity > 1) {
         card.quantity--;
         store.decreaseQuantity({
@@ -70,7 +80,8 @@ const decreaseQuantity = (card) => {
 };
 
 //Обработка изминения ввода колличества
-const onInputChange = (card, event) => {
+const onInputChange = (card:Card, event:Event) => {
+const input = event.target as HTMLInputElement;
     const value = parseInt(event.target.value);
 
     if (!isNaN(value) && value >= 1) {
