@@ -19,7 +19,6 @@ const drop = ref<number>(0);
 const sortItems = (): void => {
     console.log("sortItems", selectedFilter.value)
     let selectedPriceRanges = Object.entries(priceRanges.value)
-
         .filter(([range, isChecked]) => isChecked) // Отбираем только отмеченные диапазоны
         .map(([range]) => range);
     // Получаем только названия диапазонов
@@ -34,18 +33,6 @@ const sortItems = (): void => {
 const sortSize = () => {
     drop.value = 0;
 };
-
-/*const sortCheckbox = () => {
-    console.log("sortCheckbox")
-    let selectedPriceRanges = Object.entries(priceRanges.value)
-        .filter(([range, isChecked]) => isChecked) // Отбираем только отмеченные диапазоны
-        .map(([range]) => range); // Получаем только названия диапазонов
-    store.sortFilteredCards({
-        filter: selectedFilter.value,
-        priceRanges: selectedPriceRanges
-    });
-    drop.value = 0;
-};*/
 
 const togglePriceRange = (priceRange: keyof PriceRanges) => {
     priceRanges.value[priceRange] = !priceRanges.value[priceRange];

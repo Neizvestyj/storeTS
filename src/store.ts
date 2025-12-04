@@ -67,7 +67,7 @@ export const useStore = defineStore('store', {
             if (savedCart) {
                 this.cart = JSON.parse(savedCart);
 
-                this.sum = this.cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+                this.sum = this.cart.reduce((total: number, item: Card) => total + (item.price * item.quantity), 0);
             }
         },
 

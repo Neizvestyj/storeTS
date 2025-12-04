@@ -1,9 +1,9 @@
 <script setup lang="ts">
 alert('alert')
-import { computed, watch, ref, onMounted } from 'vue';
+import { computed, watch, ref } from 'vue';
 import { useStore } from '../store';
 const store = useStore(); // Инициализация store
-const alertRef = ref<HTMLDivElement|null>(null); // Создаем ссылку на элемент
+const alertRef = ref<HTMLDivElement | null>(null); // Создаем ссылку на элемент
 const isValidDel = computed(() => store.isValidDel);
 
 const closed = () => {

@@ -9,7 +9,9 @@
       "DOM.Iterable"
     ],
     "types": [
-      "vite/client"
+      "vite/client",
+      "vue",
+      "@vitejs/plugin-vue"
     ],
     "skipLibCheck": true,
     /* Bundler mode */

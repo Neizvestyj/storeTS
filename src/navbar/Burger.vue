@@ -4,28 +4,31 @@ import { computed, nextTick, getCurrentInstance, onMounted, onBeforeUnmount } fr
 import { useStore } from '../store';
 const store = useStore();
 const isOpen = computed(() => store.isOpen);
-const { proxy } = getCurrentInstance();
-const toggleMenu = (event:MouseEvent):void => {
+const instance = getCurrentInstance();
+if (!instance) {
+    throw new Error("getCurrentInstance() returned null");
+}
+const proxy = instance.proxy;
+//const { proxy } = getCurrentInstance();
+const toggleMenu = (event: MouseEvent | TouchEvent): void => {
     if (event && event.stopPropagation) event.stopPropagation();
     store.toggleMenu();
 
     // Переключение состояния
     if (isOpen.value) {
         nextTick(() => {
-            const menu = proxy.$refs.menuRef;
-            if (menu) {
-                menu.focus && menu.focus();
+            const menu = proxy?.$refs.menuRef as HTMLElement;
+            if (menu && typeof menu.focus === 'function') {
+                menu.focus();
             }
         });
     }
 };
-
 const closeMenu = () => {
     store.closeMenu();
 };
-
-const onOutside = (e:MouseEvent) => {
-    const menu = proxy.$refs.menuRef;
+const onOutside = (e: MouseEvent | TouchEvent) => {
+    const menu = proxy?.$refs.menuRef as HTMLElement;
     if (!menu) return;
 
     // Проверка был ли клик вне меню 
@@ -41,13 +44,15 @@ const onKeydown = (e: KeyboardEvent) => {
 };
 
 onMounted(() => {
-    document.addEventListener("click", onOutside); document.addEventListener("touchstart", onOutside); document.addEventListener("keydown", onKeydown);
+    document.addEventListener("click", onOutside as EventListener);
+    document.addEventListener("touchstart", onOutside as EventListener);
+    document.addEventListener("keydown", onKeydown);
 });
 
 // Удаляем обработчики перед размонтированием
 onBeforeUnmount(() => {
-    document.removeEventListener("click", onOutside);
-    document.removeEventListener("touchstart", onOutside);
+    document.removeEventListener("click", onOutside as EventListener);
+    document.removeEventListener("touchstart", onOutside as EventListener);
     document.removeEventListener("keydown", onKeydown);
 });
 </script>
@@ -56,8 +61,8 @@ onBeforeUnmount(() => {
 
 <template>
     <div class="burger-menu">
-        <label class="input-title" @click.stop="toggleMenu" @touchstart.stop="toggleMenu" :aria-expanded="isOpen.toString()"
-            aria-controls="burger-menu">
+        <label class="input-title" @click.stop="toggleMenu" @touchstart.stop="toggleMenu" :aria-expanded="isOpen" aria -
+            controls=" burger-menu">
             <svg p class="header-burger" width="21" height="23" viewBox="0 0 32 23" xmlns="http://www.w3.org/2000/svg">
                 <path d="M0 23V20.31H32V23H0ZM0 12.76V10.07H32V12.76H0ZM0 2.69V0H32V2.69H0Z" />
             </svg>
@@ -81,7 +86,7 @@ onBeforeUnmount(() => {
                     </label>
                     <p class="input-menu">MENU</p>
 
-                    <router-link to="/promoProduct" @click.native="closeMenu" class="input-summary"> NEW ARRIVALS
+                    <router-link to="/promoProduct" @click="closeMenu" class="input-summary"> NEW ARRIVALS
                     </router-link>
 
                     <details>
